@@ -1,4 +1,4 @@
-# logging-demo
+# spring-boot-logging-demo
 
 ## Maven build
 
