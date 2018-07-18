@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: logging-demo
-        image: yunsangjun/logging-demo:latest
+        image: dtlabs/spring-boot-logging-demo:latest
         ports:
         - containerPort: 8080
         volumeMounts:
