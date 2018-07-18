@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logging-demo
+  labels:
+    app: logging-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logging-demo
+  template:
+    metadata:
+      labels:
+        app: logging-demo
+    spec:
+      containers:
+      - name: logging-demo
+        image: yunsangjun/logging-demo:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: log-volume
+          mountPath: /logs
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      - name: fluent-bit
+        image: fluent/fluent-bit:0.13.4
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 2020
+        env:
+        - name: FLUENT_ELASTICSEARCH_HOST
+          value: "elasticsearch.kube-system.svc.cluster.local"
+        - name: FLUENT_ELASTICSEARCH_PORT
+          value: "9200"
+        volumeMounts:
+        - name: log-volume
+          mountPath: /var/logs
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc/
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: log-volume
+        emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
