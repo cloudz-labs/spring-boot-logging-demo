@@ -20,6 +20,14 @@ public class HomeRestController {
         logger.error("logback example - error level");
         
         return "Hello World!";
-    }    
+    }
+
+    @RequestMapping(value = "/exception", method = RequestMethod.GET)
+    public String getArithmeticException(){
+        int i = 10;
+        int j = 0;
+        int k = i / j;
+        return String.valueOf(k);
+    }
     
 }

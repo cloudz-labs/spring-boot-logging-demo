@@ -30,13 +30,13 @@ spec:
             cpu: 100m
             memory: 256Mi
       - name: fluent-bit
-        image: fluent/fluent-bit:0.13.4
+        image: fluent/fluent-bit:0.13.8
         imagePullPolicy: Always
         ports:
           - containerPort: 2020
         env:
         - name: FLUENT_ELASTICSEARCH_HOST
-          value: "elasticsearch.kube-system.svc.cluster.local"
+          value: "elasticsearch"
         - name: FLUENT_ELASTICSEARCH_PORT
           value: "9200"
         volumeMounts:

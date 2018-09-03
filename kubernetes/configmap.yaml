@@ -23,7 +23,8 @@ data:
         Name              tail
         Tag               logs-from-fluentbit.*
         Path              /var/logs/spring-boot-logging.log
-        Parser            apache
+        Multiline         On
+        Parser_Firstline  spring-file-log
         DB                /var/log/flb_kube.db
         Mem_Buf_Limit     5MB
         Skip_Long_Lines   On
@@ -79,3 +80,10 @@ data:
         Regex       ^\<(?<pri>[0-9]+)\>(?<time>[^ ]* {1,2}[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? *(?<message>.*)$
         Time_Key    time
         Time_Format %b %d %H:%M:%S
+    [PARSER]
+        Name        spring-file-log
+        Format      regex
+        Regex       ^\[(?<hostname>[^\]]*)\] (?<time>[^\]]*) (?<level>[^ ]*) (?<pid>[^ ]*) --- \[(?<thread>[^\]]*)\] *(?<message>.*)$
+        Time_Key    time
+        Time_Format %Y-%m-%d %H:%M:%S.%L
+
