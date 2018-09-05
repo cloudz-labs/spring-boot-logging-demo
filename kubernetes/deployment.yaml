@@ -30,13 +30,13 @@ spec:
             cpu: 100m
             memory: 256Mi
       - name: fluent-bit
-        image: fluent/fluent-bit:0.13.8
+        image: fluent/fluent-bit:0.14.1
         imagePullPolicy: Always
         ports:
           - containerPort: 2020
         env:
         - name: FLUENT_ELASTICSEARCH_HOST
-          value: "elasticsearch"
+          value: "elasticsearch.logging.svc.cluster.local"
         - name: FLUENT_ELASTICSEARCH_PORT
           value: "9200"
         volumeMounts:
@@ -58,3 +58,18 @@ spec:
       - name: fluent-bit-config
         configMap:
           name: fluent-bit-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logging-demo
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: logging-demo
+  sessionAffinity: None
+  type: NodePort

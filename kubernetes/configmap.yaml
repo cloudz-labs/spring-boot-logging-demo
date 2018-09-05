@@ -10,7 +10,7 @@ data:
   fluent-bit.conf: |
     [SERVICE]
         Flush         1
-        Log_Level     info
+        Log_Level     error
         Daemon        off
         Parsers_File  parsers.conf
         HTTP_Server   On
